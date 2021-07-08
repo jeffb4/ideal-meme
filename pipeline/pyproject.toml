@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "pipeline"
+version = "0.1.0"
+description = "AWS CDK definition of CodePipeline pipeline"
+authors = ["Jeff Bachtel <jeff.bachtel@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+"aws-cdk.aws-lambda" = "^1.111.0"
+"aws-cdk.aws-codebuild" = "^1.111.0"
+"aws-cdk.aws-codepipeline" = "^1.111.0"
+"aws-cdk.aws-codecommit" = "^1.111.0"
+"aws-cdk.aws-codepipeline-actions" = "^1.111.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.6b0"
+pylint = "^2.9.3"
+pytest = "^6.2.4"
+mypy = "^0.910"
+isort = "^5.9.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
