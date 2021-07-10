@@ -57,7 +57,6 @@ class PipelineStack(cdk.Stack):
                     phases=dict(
                         install=dict(
                             commands=[
-                                "ls -alR",
                                 "cd lambda",
                                 "npm install",
                                 "npm install typescript",
