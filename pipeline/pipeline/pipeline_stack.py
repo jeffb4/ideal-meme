@@ -33,7 +33,9 @@ class PipelineStack(cdk.Stack):
                             commands=[
                                 "npm install aws-cdk",
                                 "npm update",
-                                "python -m pip install -r requirements.txt",
+                                "python -m pip install poetry",
+                                "poetry config virtualenvs.create false",
+                                "poetry install --no-root --no-dev",
                             ]
                         ),
                         build=dict(commands=["npx cdk synth -o dist"]),
