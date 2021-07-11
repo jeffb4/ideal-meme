@@ -86,12 +86,12 @@ class PipelineStack(cdk.Stack):
                             # test output from API
                             commands=[
                                 "export API_URL=$(cat $(find / -name overrides.json)|jq -r '.[]')",
-                                'export API_OUT="$(curl -sq $API_URL)"',
-                                "export API_RETTIME=$(cat $API_OUT | jq -r '.timestamp')",
-                                "export API_TEXT=\"$(cat $API_OUT | jq -r '.message')\"",
+                                "curl -sq $API_URL > api_out",
+                                "export API_RETTIME=$(cat api_out | jq -r '.timestamp')",
+                                "export API_TEXT=\"$(cat api_out | jq -r '.message')\"",
                                 "export API_RUNTIME=$(date '+%s')",
                                 "echo Retrieved from API",
-                                "cat $API_OUT",
+                                "cat api_out",
                                 "export API_PASTTIME=$((${API_RUNTIME} - 60))",
                                 "export API_FUTTIME=$((${API_RUNTIME} + 60))",
                                 'if [ "$API_TEXT" != "Automate all the things!" ]; then '
