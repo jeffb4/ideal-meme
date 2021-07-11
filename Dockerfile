@@ -23,11 +23,10 @@ COPY . ./
 
 # Setup the virtualenv
 RUN python -m venv /venv \
-    && /venv/bin/pip install poetry==${POETRY_VERSION} awscli \
+    && /venv/bin/pip install poetry==${POETRY_VERSION} \
     && poetry config virtualenvs.create false \
     && cd /app/pipeline \
     && poetry install --no-root ${POETRY_ARGS} \
-    && /venv/bin/pip install colorama \
     && apt update \
     && apt install -y jq nodejs npm \
     && npm install -g aws-cdk
