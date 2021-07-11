@@ -1,4 +1,9 @@
-from aws_cdk import core, aws_codedeploy as codedeploy, aws_lambda as lambda_
+from aws_cdk import (
+    core,
+    aws_codedeploy as codedeploy,
+    aws_lambda as lambda_,
+    aws_apigateway as apigateway,
+)
 import datetime
 
 
@@ -27,3 +32,15 @@ class LambdaStack(core.Stack):
             alias=alias,
             deployment_config=codedeploy.LambdaDeploymentConfig.LINEAR_10_PERCENT_EVERY_1_MINUTE,
         )
+        api = apigateway.RestApi(
+            self,
+            "ideal-meme-api",
+            rest_api_name="Ideal Meme Service",
+            description="This service serves epoch.",
+        )
+
+        ideal_meme_integration = apigateway.LambdaIntegration(
+            func, request_templates={"application/json": '{ "statusCode": "200" }'}
+        )
+
+        api.root.add_method("GET", ideal_meme_integration)  # GET /
