@@ -74,6 +74,26 @@ class PipelineStack(cdk.Stack):
                 )
             ),
         )
+        lambda_funtest = codebuild.PipelineProject(
+            self,
+            "LambdaFunTest",
+            build_spec=codebuild.BuildSpec.from_object(
+                dict(
+                    version="0.2",
+                    phases=dict(
+                        # install=dict(commands=["yum install -y curl"]),
+                        build=dict(
+                            commands=[
+                                "find / -name overrides.json",
+                                "cat $(find / -name overrides.json)"
+                                "curl https://google.com/",
+                            ]
+                        ),
+                    ),
+                    environment=dict(buildImage=codebuild.LinuxBuildImage.STANDARD_5_0),
+                )
+            ),
+        )
         github_token = cdk.CfnParameter(
             self,
             "githubToken",
@@ -83,6 +103,7 @@ class PipelineStack(cdk.Stack):
         source_output = codepipeline.Artifact()
         cdk_build_output = codepipeline.Artifact("CdkBuildOutput")
         lambda_build_output = codepipeline.Artifact("LambdaBuildOutput")
+        lambda_funtest_output = codepipeline.Artifact("LambdaFuntestOutput")
 
         lambda_location = lambda_build_output.s3_location
         codepipeline.Pipeline(
@@ -125,6 +146,59 @@ class PipelineStack(cdk.Stack):
                             input=source_output,
                             outputs=[cdk_build_output],
                         ),
+                    ],
+                ),
+                codepipeline.StageProps(
+                    stage_name="DeployFunTest",
+                    actions=[
+                        codepipeline_actions.CloudFormationCreateUpdateStackAction(
+                            action_name="Lambda_CFN_FunDeploy",
+                            template_path=cdk_build_output.at_path(
+                                "LambdaStack.template.json"
+                            ),
+                            stack_name="LambdaDeploymentFunTestStack",
+                            admin_permissions=True,
+                            output_file_name="overrides.json",
+                            output=lambda_funtest_output,
+                            parameter_overrides=dict(
+                                lambda_code.assign(
+                                    bucket_name=lambda_location.bucket_name,
+                                    object_key=lambda_location.object_key,
+                                    object_version=lambda_location.object_version,
+                                )
+                            ),
+                            extra_inputs=[lambda_build_output],
+                        )
+                    ],
+                ),
+                codepipeline.StageProps(
+                    stage_name="FunTest",
+                    actions=[
+                        codepipeline_actions.CodeBuildAction(
+                            action_name="Lambda_FunTest",
+                            project=lambda_funtest,
+                            extra_inputs=[lambda_funtest_output],
+                            input=source_output,
+                            # outputs=[lambda_build_output],
+                        )
+                    ],
+                ),
+                codepipeline.StageProps(
+                    stage_name="DestroyFunTest",
+                    actions=[
+                        codepipeline_actions.CloudFormationDeleteStackAction(
+                            action_name="Lambda_CFN_FunDestroy",
+                            stack_name="LambdaDeploymentFunTestStack",
+                            admin_permissions=True,
+                            parameter_overrides=dict(
+                                lambda_code.assign(
+                                    bucket_name=lambda_location.bucket_name,
+                                    object_key=lambda_location.object_key,
+                                    object_version=lambda_location.object_version,
+                                )
+                            ),
+                            extra_inputs=[lambda_build_output],
+                        )
                     ],
                 ),
                 codepipeline.StageProps(
