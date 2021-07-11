@@ -86,7 +86,7 @@ class PipelineStack(cdk.Stack):
                         build=dict(
                             # test output from API
                             commands=[
-                                "export API_URL=$(cat $(find / -name overrides.json)|jq -r '.[]')",
+                                "export API_URL=$(cat $(find / -name overrides.json)|jq -r '.[]'|head -1)",
                                 "curl -sq $API_URL > api_out",
                                 "export API_RETTIME=$(cat api_out | jq -r '.timestamp')",
                                 "export API_TEXT=\"$(cat api_out | jq -r '.message')\"",
