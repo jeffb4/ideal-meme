@@ -17,6 +17,7 @@ cdk deploy \
 API_ENDPOINT=$(aws --region $AWS_REGION cloudformation describe-stacks --stack-name LambdaDeploymentStack | jq -r ".Stacks[0].Outputs[0].OutputValue")
 
 while [ "$API_ENDPOINT" = "" ]; do
+  sleep 1
   API_ENDPOINT=$(aws --region $AWS_REGION cloudformation describe-stacks --stack-name LambdaDeploymentStack | jq -r ".Stacks[0].Outputs[0].OutputValue")
 done
 
