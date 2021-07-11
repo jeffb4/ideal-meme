@@ -23,7 +23,7 @@ COPY . ./
 
 # Setup the virtualenv
 RUN python -m venv /venv \
-    && pip install poetry==${POETRY_VERSION} awscli colorama \
+    && /venv/bin/pip install poetry==${POETRY_VERSION} awscli colorama \
     && poetry config virtualenvs.create false \
     && cd /app/pipeline \
     && poetry install --no-root ${POETRY_ARGS} \
