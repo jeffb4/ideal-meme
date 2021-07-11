@@ -14,11 +14,11 @@ cdk deploy \
   --parameters "PipelineStack:githubToken=${GH_TOKEN}" \
   PipelineStack
 
-API_ENDPOINT=$(aws --region $AWS_REGION cloudformation describe-stacks --stack-name LambdaDeploymentStack | jq -r ".Stacks[0].Outputs[0].OutputValue")
+API_ENDPOINT=$(aws --region $AWS_REGION cloudformation describe-stacks --stack-name LambdaDeploymentStack 2> /dev/null | jq -r ".Stacks[0].Outputs[0].OutputValue")
 
 while [ "$API_ENDPOINT" = "" ]; do
   sleep 1
-  API_ENDPOINT=$(aws --region $AWS_REGION cloudformation describe-stacks --stack-name LambdaDeploymentStack | jq -r ".Stacks[0].Outputs[0].OutputValue")
+  API_ENDPOINT=$(aws --region $AWS_REGION cloudformation describe-stacks --stack-name LambdaDeploymentStack 2> /dev/null | jq -r ".Stacks[0].Outputs[0].OutputValue")
 done
 
 echo "API should be available at $API_ENDPOINT"
