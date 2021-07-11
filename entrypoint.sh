@@ -7,5 +7,6 @@ fi
 cd /app/pipeline || exit 1
 
 cdk deploy \
+  --require-approval never \
   --parameters "PipelineStack:githubToken=${GH_TOKEN}" \
   PipelineStack
