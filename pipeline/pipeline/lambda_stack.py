@@ -44,3 +44,5 @@ class LambdaStack(core.Stack):
         )
 
         api.root.add_method("GET", ideal_meme_integration)
+
+        core.CfnOutput(self, "APIG", description="API Gateway URL", value=api.url)
