@@ -83,10 +83,25 @@ class PipelineStack(cdk.Stack):
                     phases=dict(
                         # install=dict(commands=["yum install -y curl"]),
                         build=dict(
+                            # test output from API
                             commands=[
-                                "find / -name overrides.json",
-                                "cat $(find / -name overrides.json)",
-                                "curl https://google.com/",
+                                "export API_URL=$(cat $(find / -name overrides.json)|jq -r '.[]')",
+                                "export API_OUT=$(curl -sq $API_URL)",
+                                "export API_RETTIME=$(cat $API_OUT | jq -r '.timestamp')",
+                                "export API_TEXT=$(cat $API_OUT | jq -r '.message')",
+                                "export API_RUNTIME=$(date '+%s')",
+                                "echo Retrieved from API",
+                                "cat $API_OUT",
+                                "export API_PASTTIME=$((${API_RUNTIME} - 60))",
+                                "export API_FUTTIME=$((${API_RUNTIME} + 60))",
+                                'if [ "$API_TEXT" != "Automate all the things!" ]; then '
+                                'echo "Bad message $API_TEXT"; exit 1; fi',
+                                "if [[ $API_PASTTIME > $API_RETTIME ]]; then "
+                                'echo "Time too far in past $API_RETTIME (limit $API_PASTTIME)"; '
+                                "exit 1; fi",
+                                "if [[ $API_FUTTIME < $API_RETTIME ]]; then "
+                                'echo "Time too far in future $API_RETTIME (limit $API_FUTTIME)"; '
+                                "exit 1; fi",
                             ]
                         ),
                     ),
