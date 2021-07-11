@@ -85,7 +85,7 @@ class PipelineStack(cdk.Stack):
                         build=dict(
                             commands=[
                                 "find / -name overrides.json",
-                                "cat $(find / -name overrides.json)"
+                                "cat $(find / -name overrides.json)",
                                 "curl https://google.com/",
                             ]
                         ),
