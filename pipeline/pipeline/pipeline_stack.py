@@ -35,7 +35,7 @@ class PipelineStack(cdk.Stack):
                                 "npm update",
                                 "python -m pip install poetry",
                                 "python -m poetry config virtualenvs.create false",
-                                "python -m poetry poetry install --no-root --no-dev",
+                                "python -m poetry install --no-root --no-dev",
                             ]
                         ),
                         build=dict(commands=["npx cdk synth -o dist"]),
