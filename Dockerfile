@@ -23,12 +23,12 @@ COPY . ./
 
 # Setup the virtualenv
 RUN python -m venv /venv \
-    && pip install poetry==${POETRY_VERSION} \
+    && pip install poetry==${POETRY_VERSION} awscli \
     && poetry config virtualenvs.create false \
     && cd /app/pipeline \
     && poetry install --no-root ${POETRY_ARGS} \
     && apt update \
-    && apt install -y nodejs npm \
+    && apt install -y jq nodejs npm \
     && npm install -g aws-cdk
 
 CMD [ "/app/entrypoint.sh" ]
