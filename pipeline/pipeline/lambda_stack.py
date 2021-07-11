@@ -43,4 +43,4 @@ class LambdaStack(core.Stack):
             func, request_templates={"application/json": '{ "statusCode": "200" }'}
         )
 
-        api.root.add_method("GET", ideal_meme_integration)  # GET /
+        api.root.add_method("GET", ideal_meme_integration)
