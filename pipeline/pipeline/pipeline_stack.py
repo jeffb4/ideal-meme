@@ -40,10 +40,10 @@ class PipelineStack(cdk.Stack):
                                 "cd ..",
                             ]
                         ),
-                        build=dict(commands=["npx cdk synth -o dist"]),
+                        build=dict(commands=["cd pipeline", "npx cdk synth -o dist"]),
                     ),
                     artifacts={
-                        "base-directory": "dist",
+                        "base-directory": "pipeline/dist",
                         "files": ["LambdaStack.template.json"],
                     },
                     environment=dict(buildImage=codebuild.LinuxBuildImage.STANDARD_5_0),
