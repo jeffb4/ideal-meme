@@ -79,6 +79,7 @@ class PipelineStack(cdk.Stack):
             "LambdaFunTest",
             build_spec=codebuild.BuildSpec.from_object(
                 dict(
+                    env=dict(shell="bash"),
                     version="0.2",
                     phases=dict(
                         # install=dict(commands=["yum install -y curl"]),
