@@ -106,8 +106,10 @@ class PipelineStack(cdk.Stack):
                             ]
                         ),
                     ),
-                    environment=dict(buildImage=codebuild.LinuxBuildImage.STANDARD_5_0),
-                )
+                ),
+            ),
+            environment=codebuild.BuildEnvironment(
+                build_image=codebuild.LinuxBuildImage.STANDARD_5_0, privileged=True
             ),
         )
         github_token = cdk.CfnParameter(
