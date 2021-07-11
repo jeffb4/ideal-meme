@@ -1,6 +1,6 @@
 // index.ts
 const MESSAGE = {
-  message: "Automate all the thing!",
+  message: "Automate all the things!",
   secretMessage: "Automation for the people!",
   timestamp: Math.round(Date.now() / 1000),
 };
