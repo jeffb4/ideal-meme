@@ -34,6 +34,7 @@ class PipelineStack(cdk.Stack):
                                 "npm install aws-cdk",
                                 "npm update",
                                 "python -m pip install poetry",
+                                "cd pipeline",
                                 "python -m poetry config virtualenvs.create false",
                                 "python -m poetry install --no-root --no-dev",
                             ]
