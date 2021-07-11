@@ -10,12 +10,16 @@ Gaggle coding exercise repository
 
 - AWS access
 
+- GitHub Personal Access Token
+
 ### Running
 
     docker run -v ${HOME}/.aws:/root/.aws \
       -e AWS_ACCESS_KEY_ID \
       -e AWS_SECRET_ACCESS_KEY \
-      -e AWS_SESSION_TOKEN jeffb4/ideal-meme
+      -e AWS_SESSION_TOKEN \
+      -e GH_TOKEN=github_personal_access_token \
+      jeffb4/ideal-meme
 
 ## Development
 
