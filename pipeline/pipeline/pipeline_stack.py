@@ -86,9 +86,9 @@ class PipelineStack(cdk.Stack):
                             # test output from API
                             commands=[
                                 "export API_URL=$(cat $(find / -name overrides.json)|jq -r '.[]')",
-                                "export API_OUT=$(curl -sq $API_URL)",
+                                'export API_OUT="$(curl -sq $API_URL)"',
                                 "export API_RETTIME=$(cat $API_OUT | jq -r '.timestamp')",
-                                "export API_TEXT=$(cat $API_OUT | jq -r '.message')",
+                                "export API_TEXT=\"$(cat $API_OUT | jq -r '.message')\"",
                                 "export API_RUNTIME=$(date '+%s')",
                                 "echo Retrieved from API",
                                 "cat $API_OUT",
